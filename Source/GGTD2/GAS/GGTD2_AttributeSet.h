@@ -13,6 +13,10 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChange, float, HealthChange);
+
+
 /**
  * 
  */
@@ -22,6 +26,13 @@ class GGTD2_API UGGTD2_AttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChange OnHealthChange;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChange OnMaxHealthChange;
+	
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
 	FGameplayAttributeData Health;
