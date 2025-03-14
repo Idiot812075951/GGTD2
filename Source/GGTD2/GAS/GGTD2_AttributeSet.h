@@ -14,8 +14,6 @@ GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChange, float, HealthChange);
-
 
 /**
  * 
@@ -26,21 +24,22 @@ class GGTD2_API UGGTD2_AttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintAssignable)
-	FOnAttributeChange OnHealthChange;
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnAttributeChange OnMaxHealthChange;
-	
+
 	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite,ReplicatedUsing=OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UGGTD2_AttributeSet, Health);
+	UFUNCTION()
+	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite,ReplicatedUsing=OnRep_MaxHealth);
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UGGTD2_AttributeSet, MaxHealth);
+	UFUNCTION()
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldHealth) const;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
 	FGameplayAttributeData Armor;
@@ -50,5 +49,7 @@ public:
 	FGameplayAttributeData MaxArmor;
 	ATTRIBUTE_ACCESSORS(UGGTD2_AttributeSet, MaxArmor);
 	
-	
 };
+
+
+

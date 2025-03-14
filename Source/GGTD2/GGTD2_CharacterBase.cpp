@@ -5,10 +5,13 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/AttributeSetWidget.h"
 
 
+class UAttributeSetWidget;
 // Sets default values
 AGGTD2_CharacterBase::AGGTD2_CharacterBase()
 {
@@ -43,16 +46,38 @@ AGGTD2_CharacterBase::AGGTD2_CharacterBase()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBar"));
+	HPBar->SetupAttachment(GetCapsuleComponent());
+	
+
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+	
+}
+
+void AGGTD2_CharacterBase::Test()
+{
+	UAttributeSetWidget* Widget=Cast<UAttributeSetWidget>(this->HPBar->GetWidget());
+	if (Widget)
+	{
+		Widget->BindCharacter(this);
+	}
 }
 
 // Called when the game starts or when spawned
 void AGGTD2_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (IsNetMode(NM_Client))
+	{
+		
+		FTimerHandle TimerHandle;
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AGGTD2_CharacterBase::Test, 1.f,false);
+		// 假设 UI 组件已附加到怪物
+
+	}
 }
 
 // Called every frame
