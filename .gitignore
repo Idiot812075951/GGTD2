@@ -3,3 +3,7 @@
 Intermediate
 Binaries
 *.log
+Saved
+/GGTD2.sln.DotSettings.user
+/GGTD2.uproject.DotSettings.user
+/Content/__ExternalActors__/TopDown/Maps/
