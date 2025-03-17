@@ -74,7 +74,7 @@ void AGGTD2_CharacterBase::BeginPlay()
 	{
 		
 		FTimerHandle TimerHandle;
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &AGGTD2_CharacterBase::Test, 1.f,false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AGGTD2_CharacterBase::Test, 0.1,false);
 		// 假设 UI 组件已附加到怪物
 
 	}

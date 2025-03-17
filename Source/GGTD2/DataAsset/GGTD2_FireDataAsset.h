@@ -33,11 +33,22 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
 	float ExplosionDamageRatio = 0.5f;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
+	bool CanBurning=true;
+	
+	//点燃百分比
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
+	float BurningPercent=0.01f;	
+	//点燃持续几秒
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
+	float BurningSeconds=5.0f;
+
 	// 对应GameplayTag
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
 	FGameplayTag ElementTag = FGameplayTag::RequestGameplayTag("Gameplay.Element.Fire");
-
+	
+	// 对应GameplayTag
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
-	TSubclassOf<UGameplayEffect> BurnEffectClass;
+	FGameplayTag BurningCueTag = FGameplayTag::RequestGameplayTag("GameplayCue.Burning");
 	
 };
