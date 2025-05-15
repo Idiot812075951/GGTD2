@@ -89,7 +89,6 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
     {
         // 计算爆炸伤害
         float ExplosionDamage = FinalDamage * FireData->ExplosionDamageRatio;
-
         // 执行范围伤害（使用GAS框架）
         TArray<FHitResult> OutHits;
         FCollisionShape Sphere = FCollisionShape::MakeSphere(FireData->ExplosionRadius);
@@ -107,7 +106,7 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                 if (UAbilitySystemComponent* HitASC = Cast<UAbilitySystemComponent>(Hit.GetActor()->GetComponentByClass(UAbilitySystemComponent::StaticClass())))
                 {
                     FGameplayEffectSpecHandle IgniteSpecHandle = SourceASC->MakeOutgoingSpec(
-                        UGameplayEffect::StaticClass(),
+                        FireData->GE_HP_SetByCallerClass,
                         1.0f,
                         Context
                     );
@@ -120,8 +119,9 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                             const UGGTD2_AttributeSet* HitAttributeSet = Cast<UGGTD2_AttributeSet>(HitASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass()));
                             if (HitAttributeSet)
                             {
-                                FName HealthAttributeName = *UGGTD2_AttributeSet::GetHealthAttribute().GetName();
-                                IgniteSpecHandle.Data->SetSetByCallerMagnitude(HealthAttributeName, -ExplosionDamage);
+                                //这个SetSetByCallerMagnitude是不是在修改Attribute属性的？我想把上面的伤害值扩散出去
+                                IgniteSpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Gameplay.GE.SetByCaller.Health")), -ExplosionDamage);
+                                //这里是在干嘛？
                                 HitASC->ApplyGameplayEffectSpecToSelf(*IgniteSpecHandle.Data.Get());
                                 RecordDamage+=ExplosionDamage;
                             }

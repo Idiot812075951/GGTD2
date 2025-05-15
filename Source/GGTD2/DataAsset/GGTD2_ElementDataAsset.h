@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffect.h"
 #include "Engine/DataAsset.h"
 #include "GGTD2_ElementDataAsset.generated.h"
 
@@ -13,5 +14,8 @@ UCLASS()
 class GGTD2_API UGGTD2_ElementDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DataAsset")
+	TSubclassOf<UGameplayEffect>  GE_HP_SetByCallerClass;
 };
