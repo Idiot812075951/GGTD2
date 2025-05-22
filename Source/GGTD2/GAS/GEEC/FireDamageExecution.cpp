@@ -120,10 +120,14 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                             if (HitAttributeSet)
                             {
                                 //这个SetSetByCallerMagnitude是不是在修改Attribute属性的？我想把上面的伤害值扩散出去
-                                IgniteSpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Gameplay.GE.SetByCaller.Health")), -ExplosionDamage);
+                                IgniteSpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.GE.SetByCaller.Health")), -ExplosionDamage);
                                 //这里是在干嘛？
                                 HitASC->ApplyGameplayEffectSpecToSelf(*IgniteSpecHandle.Data.Get());
                                 RecordDamage+=ExplosionDamage;
+                                //可以用下面的东西来检查SetByCaller是否生效
+                                // const float Value = IgniteSpecHandle.Data->GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Gameplay.GE.SetByCaller.Health")),false);
+                                // UE_LOG(LogTemp, Warning, TEXT("SetByCaller Value: %f"), Value);
+                                
                             }
                         }
                     }
