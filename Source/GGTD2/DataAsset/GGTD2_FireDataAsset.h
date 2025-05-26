@@ -50,5 +50,8 @@ public:
 	// 对应GameplayTag
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Fire")
 	FGameplayTag BurningCueTag = FGameplayTag::RequestGameplayTag("GameplayCue.Burning");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="Fire")
+	TSubclassOf<UGameplayEffect> GE_Burning;
 	
 };

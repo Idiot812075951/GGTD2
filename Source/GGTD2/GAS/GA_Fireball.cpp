@@ -28,13 +28,12 @@ void UGA_Fireball::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	// 创建Spec并附加DataAsset
 	FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(GE_FireDamage);
 	if (!SpecHandle.IsValid()) return;
-
+	//这个不能删，给我们的火元素GE添加数据呢
 	FGameplayEffectContextHandle Context = SpecHandle.Data->GetContext();
 	Context.AddSourceObject(FireData);
-
 	// 射线检测参数
-	FVector Start = ActorInfo->AvatarActor->GetActorLocation();
-	FVector End = Start + ActorInfo->AvatarActor->GetActorForwardVector() * 1000.0f;
+	const FVector Start = ActorInfo->AvatarActor->GetActorLocation();
+	const FVector End = Start + ActorInfo->AvatarActor->GetActorForwardVector() * 1000.0f;
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
@@ -42,15 +41,14 @@ void UGA_Fireball::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(ActorInfo->OwnerActor.Get());
 	FHitResult HitResult;
-	bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
+
+	if (const bool bHit = UKismetSystemLibrary::LineTraceSingleForObjects(
 		GetWorld(), Start, End, ObjectTypes,
 		false, IgnoreActors, EDrawDebugTrace::ForOneFrame,
 		HitResult, true
-	);
-
-	if (bHit)
+	))
 	{
-		AActor* HitActor = HitResult.GetActor();
+		const AActor* HitActor = HitResult.GetActor();
 		UE_LOG(LogTemp, Log, TEXT("命中Actor: %s"), *GetNameSafe(HitActor));
 
 		// 获取目标ASC

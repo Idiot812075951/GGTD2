@@ -91,6 +91,8 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
         float ExplosionDamage = FinalDamage * FireData->ExplosionDamageRatio;
         // 执行范围伤害（使用GAS框架）
         TArray<FHitResult> OutHits;
+        FCollisionQueryParams Params = FCollisionQueryParams::DefaultQueryParam;
+        Params.AddIgnoredActor(SourceActor);
         FCollisionShape Sphere = FCollisionShape::MakeSphere(FireData->ExplosionRadius);
         if (TargetActor->GetWorld()->SweepMultiByChannel(
             OutHits,
@@ -98,7 +100,8 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
             TargetActor->GetActorLocation(),
             FQuat::Identity,
             ECC_GameTraceChannel1,
-            Sphere))
+            Sphere,
+            Params))
         {
             for (auto& Hit : OutHits)
             {
@@ -113,22 +116,17 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                     
                     if (IgniteSpecHandle.IsValid())
                     {
-                        if (IgniteSpecHandle.IsValid())
+                        // 获取目标最大生命值
+                        if (const UGGTD2_AttributeSet* HitAttributeSet = Cast<UGGTD2_AttributeSet>(HitASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass())))
                         {
-                            // 获取目标最大生命值
-                            const UGGTD2_AttributeSet* HitAttributeSet = Cast<UGGTD2_AttributeSet>(HitASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass()));
-                            if (HitAttributeSet)
-                            {
-                                //这个SetSetByCallerMagnitude是不是在修改Attribute属性的？我想把上面的伤害值扩散出去
-                                IgniteSpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.GE.SetByCaller.Health")), -ExplosionDamage);
-                                //这里是在干嘛？
-                                HitASC->ApplyGameplayEffectSpecToSelf(*IgniteSpecHandle.Data.Get());
-                                RecordDamage+=ExplosionDamage;
-                                //可以用下面的东西来检查SetByCaller是否生效
-                                // const float Value = IgniteSpecHandle.Data->GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Gameplay.GE.SetByCaller.Health")),false);
-                                // UE_LOG(LogTemp, Warning, TEXT("SetByCaller Value: %f"), Value);
-                                
-                            }
+                            //这个SetSetByCallerMagnitude是不是在修改Attribute属性的？我想把上面的伤害值扩散出去
+                            IgniteSpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.GE.SetByCaller.Health")), -ExplosionDamage);
+                            HitASC->ApplyGameplayEffectSpecToSelf(*IgniteSpecHandle.Data.Get());
+                            RecordDamage+=ExplosionDamage;
+                            //可以用下面的东西来检查SetByCaller是否生效
+                            // const float Value = IgniteSpecHandle.Data->GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Gameplay.GE.SetByCaller.Health")),false);
+                            // UE_LOG(LogTemp, Warning, TEXT("SetByCaller Value: %f"), Value);
+                            
                         }
                     }
 
@@ -142,27 +140,16 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                     {
                         if (const UGGTD2_AttributeSet* HitAttributeSet = Cast<UGGTD2_AttributeSet>(HitASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass())))
                         {
-                            float MaxHealth = HitAttributeSet->GetMaxHealth();
-                            float BurnDamage = MaxHealth * FireData->BurningPercent;
-                            float BurnTotalDamage = BurnDamage * FireData->BurningSeconds;
-
-                            // 复制一个新的UGameplayEffect实例
-                            UGameplayEffect* NewBurnEffect = NewObject<UGameplayEffect>(GetTransientPackage(),UGameplayEffect::StaticClass());
-                            NewBurnEffect->GameplayCues.Add( FGameplayEffectCue(FireData->BurningCueTag, 1, 1));
-                            if (NewBurnEffect)
-                            {
-                                FGameplayEffectSpecHandle NewBurnSpecHandle = SourceASC->MakeOutgoingSpec(
-                                     NewBurnEffect->GetClass(),
-                                    1.0f,
-                                    Context
-                                );
-                                //NewBurnSpecHandle.Data->SetDuration(FireData->BurningSeconds,false);
-                                if (NewBurnSpecHandle.IsValid())
-                                {
-                                    HitASC->ApplyGameplayEffectSpecToSelf(*NewBurnSpecHandle.Data.Get());
-                                }
-                            }
+                            const float MaxHealth = HitAttributeSet->GetMaxHealth();
+                            const float BurnDamage = MaxHealth * FireData->BurningPercent;
+                            const float BurnTotalDamage = BurnDamage * FireData->BurningSeconds;
                             RecordDamage+=BurnTotalDamage;
+                            //施加点燃的GE
+                            const FGameplayEffectSpecHandle BurningHandle = SourceASC->MakeOutgoingSpec( FireData->GE_Burning,1.0f,Context);
+                            BurningHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.GE.SetByCaller.BurningTime")), FireData->BurningSeconds);
+                            BurningHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("GameplayAbility.GE.SetByCaller.Health")), -BurnDamage);
+                            HitASC->ApplyGameplayEffectSpecToSelf(*BurningHandle.Data.Get());
+                            
                         }
                     }
                 }
