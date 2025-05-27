@@ -25,8 +25,6 @@ class GGTD2_API AGGTD2_CharacterBase : public ACharacter
 	GENERATED_BODY()
 
 public:
-
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UAbilitySystemComponent* Asc;
 	// Sets default values for this character's properties
@@ -46,8 +44,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* HPBar;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = EffectComponent, meta = (AllowPrivateAccess = "true"))
+	class UActorComponent* EffectComponent;
 
 	void Test();
 
