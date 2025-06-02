@@ -54,4 +54,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="Fire")
 	TSubclassOf<UGameplayEffect> GE_Burning;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="Fire")
+	TSubclassOf<UGameplayEffect> GE_Explosion;
+	
 };

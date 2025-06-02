@@ -109,7 +109,7 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                 if (UAbilitySystemComponent* HitASC = Cast<UAbilitySystemComponent>(Hit.GetActor()->GetComponentByClass(UAbilitySystemComponent::StaticClass())))
                 {
                     FGameplayEffectSpecHandle IgniteSpecHandle = SourceASC->MakeOutgoingSpec(
-                        FireData->GE_HP_SetByCallerClass,
+                        FireData->GE_Explosion,
                         1.0f,
                         Context
                     );

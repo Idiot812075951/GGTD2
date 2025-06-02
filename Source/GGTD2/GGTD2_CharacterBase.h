@@ -34,8 +34,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
-private:
+	
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* TopDownCameraComponent;
@@ -48,7 +47,7 @@ private:
 	class UWidgetComponent* HPBar;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = EffectComponent, meta = (AllowPrivateAccess = "true"))
-	class UActorComponent* EffectComponent;
+	class UDurationEffectComponent* EffectComponent;
 
 	void Test();
 
