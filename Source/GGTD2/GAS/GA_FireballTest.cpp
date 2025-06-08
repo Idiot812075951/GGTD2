@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GA_Fireball.h"
+#include "GA_FireballTest.h"
 
 #include "AbilitySystemComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void UGA_Fireball::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+void UGA_FireballTest::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                    const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	this->NetExecutionPolicy=EGameplayAbilityNetExecutionPolicy::ServerInitiated;

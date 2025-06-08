@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "GGTD2/DataAsset/GGTD2_FireDataAsset.h"
-#include "GA_Fireball.generated.h"
+#include "GA_FireballTest.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GGTD2_API UGA_Fireball : public UGameplayAbility
+class GGTD2_API UGA_FireballTest : public UGameplayAbility
 {
 	GENERATED_BODY()
 public:

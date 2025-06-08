@@ -2,6 +2,9 @@
 
 
 #include "FireDamageExecution.h"
+
+#include <string>
+
 #include "GGTD2/DataAsset/GGTD2_FireDataAsset.h"
 #include "AbilitySystemComponent.h"
 #include "GGTD2/GGTD2_CharacterBase.h"
@@ -72,7 +75,7 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
         EGameplayModOp::Additive,
         -FinalDamage
     ));
-
+    //下面这三个东西，从火球测试和正式火球，拿到的数据不一样，空了研究下
     const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
     const UGameplayAbility* Ability = Spec.GetContext().GetAbilityInstance_NotReplicated();
     TSubclassOf<UGameplayAbility> AbilityClass = Ability ? Ability->GetClass() : nullptr;
@@ -92,6 +95,7 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
         // 执行范围伤害（使用GAS框架）
         TArray<FHitResult> OutHits;
         FCollisionQueryParams Params = FCollisionQueryParams::DefaultQueryParam;
+        Params.bDebugQuery=true;
         Params.AddIgnoredActor(SourceActor);
         FCollisionShape Sphere = FCollisionShape::MakeSphere(FireData->ExplosionRadius);
         if (TargetActor->GetWorld()->SweepMultiByChannel(
@@ -103,11 +107,19 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
             Sphere,
             Params))
         {
+            GEngine->AddOnScreenDebugMessage(123,5,FColor::Cyan,TargetActor->GetActorLocation().ToString());
+            TArray<FGuid> Guids;
             for (auto& Hit : OutHits)
             {
-                //先计算爆炸伤害
                 if (UAbilitySystemComponent* HitASC = Cast<UAbilitySystemComponent>(Hit.GetActor()->GetComponentByClass(UAbilitySystemComponent::StaticClass())))
                 {
+                    FGuid CurrentId =Hit.GetActor()->GetActorGuid();
+                    if (Guids.Contains(CurrentId))
+                    {
+                        //草了，他这个检测范围有有时候会重复算，给他来个去重小操作，以后范围选取都要记得，考虑重复算的问题
+                        continue;
+                    }
+                    Guids.Add(CurrentId);
                     FGameplayEffectSpecHandle IgniteSpecHandle = SourceASC->MakeOutgoingSpec(
                         FireData->GE_Explosion,
                         1.0f,
@@ -135,8 +147,10 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
                         return;;
                     }
                     //添加引燃
-                    AGGTD2_CharacterBase* HitCharacter = Cast<AGGTD2_CharacterBase>(Hit.GetActor());
-                    if (HitCharacter && AbilityClass)
+                    // AGGTD2_CharacterBase* HitCharacter = Cast<AGGTD2_CharacterBase>(Hit.GetActor());
+                    // if (HitCharacter && AbilityClass)
+                    //上面两行非必要的,但还是那句话，通过GA施加的ApplyGameplayEffectSpecToTarget和GE的TargetAsc->ApplyGameplayEffectSpecToSelf(*GEHandle.Data.Get());
+                    // 拿到的数据有区别
                     {
                         if (const UGGTD2_AttributeSet* HitAttributeSet = Cast<UGGTD2_AttributeSet>(HitASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass())))
                         {

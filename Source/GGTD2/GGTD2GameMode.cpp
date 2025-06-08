@@ -11,7 +11,7 @@ AGGTD2GameMode::AGGTD2GameMode()
 	PlayerControllerClass = AGGTD2PlayerController::StaticClass();
 
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/GGTD/Gameplay/Character/BP_Player"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/GGTD/Gameplay/Character/Mage/BP_Mage"));
 	if (PlayerPawnBPClass.Class != nullptr)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
