@@ -7,7 +7,7 @@
 
 #include "GGTD2/DataAsset/GGTD2_FireDataAsset.h"
 #include "AbilitySystemComponent.h"
-#include "GGTD2/GGTD2_CharacterBase.h"
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
 #include "GGTD2/GAS/GGTD2_AttributeSet.h"
 #include "GGTD2/Helper/DamageStatisticsSystem.h"
 #include "Kismet/GameplayStatics.h"

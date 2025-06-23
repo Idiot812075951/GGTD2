@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbilityTargetActor_Radius.h"
-#include "GGTD2/GGTD2_CharacterBase.h"
 #include "TargetActor_Radius_FireBall.generated.h"
 
 /**

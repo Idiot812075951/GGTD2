@@ -3,6 +3,7 @@
 
 #include "TargetActor_Radius_FireBall.h"
 
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 
 ATargetActor_Radius_FireBall::ATargetActor_Radius_FireBall()

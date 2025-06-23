@@ -19,8 +19,9 @@ void UAttributeSetWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UAttributeSetWidget::HandleHealthChange(const FOnAttributeChangeData& Health) const
+void UAttributeSetWidget::HandleHealthChange(const FOnAttributeChangeData& Health)
 {
+	DeltaHealth=Health.NewValue-Health.OldValue;
 	OnHealthChange.Broadcast(Health.NewValue);
 }
 

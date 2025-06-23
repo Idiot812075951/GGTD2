@@ -4,7 +4,6 @@
 #include "DurationEffectComponent.h"
 
 #include "GameplayTagContainer.h"
-#include "GGTD2/GGTD2Character.h"
 
 // Sets default values for this component's properties
 UDurationEffectComponent::UDurationEffectComponent()

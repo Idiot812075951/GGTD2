@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "GGTD2/GGTD2_CharacterBase.h"
 #include "GGTD2/DataAsset/GGTD2_FireDataAsset.h"
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
 #include "GA_FireBall.generated.h"
 
 class AProjectileActor;

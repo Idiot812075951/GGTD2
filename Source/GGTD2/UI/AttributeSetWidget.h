@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "GGTD2/GGTD2_CharacterBase.h"
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
 #include "AttributeSetWidget.generated.h"
 
 
@@ -24,12 +24,15 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChange OnMaxHealthChange;
+
+	UPROPERTY(BlueprintReadOnly,VisibleAnywhere)
+	float DeltaHealth{0};
 	
 	void BindCharacter(AGGTD2_CharacterBase* CharacterBase);
 
 	virtual void NativeConstruct() override;
 	
-	void HandleHealthChange(const FOnAttributeChangeData& Health) const;
+	void HandleHealthChange(const FOnAttributeChangeData& Health);
 	void HandleMaxHealthChange(const FOnAttributeChangeData& MaxHealth) const;
 	
 };

@@ -6,7 +6,8 @@
 #include "GameplayEffectTypes.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
-#include "GGTD2/GGTD2_CharacterBase.h"
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
+
 
 // Sets default values
 AProjectileActor::AProjectileActor()
