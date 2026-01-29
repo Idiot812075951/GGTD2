@@ -1,0 +1,91 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "TargetActor_Radius_DragonRage.h"
+
+#include "NiagaraDataInterfaceEmitterBinding.h"
+#include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
+
+void ATargetActor_Radius_DragonRage::SetRadius(float InRadius)
+{
+	Radius=InRadius;
+}
+
+void ATargetActor_Radius_DragonRage::StartTargeting(UGameplayAbility* Ability)
+{
+	Super::StartTargeting(Ability);
+}
+
+void ATargetActor_Radius_DragonRage::ConfirmTargetingAndContinue()
+{
+	
+	//Super::ConfirmTargetingAndContinue();
+	// 1. 执行球形检测获取范围内所有Actor
+	const FVector Origin =this->OwningAbility.Get()->GetActorInfo().OwnerActor->GetActorLocation();
+	this->Radius=200;
+	TArray<TWeakObjectPtr<AActor>> OverlappedActors = PerformOverlap(Origin);
+
+	// 2. 转换为强引用并过滤敌人
+	TArray<AActor*> ValidEnemies;
+	for (const auto& ActorPtr : OverlappedActors)
+	{
+		if (AActor* Actor = ActorPtr.Get())
+		{
+			if (Actor->IsA(AGGTD2_CharacterBase::StaticClass()) && 
+				Actor->ActorHasTag("Enemy"))
+			{
+				ValidEnemies.Add(Actor);
+			}
+		}
+	}
+
+	switch (TargetSelection) {
+	case EGATargetSelection::Closest:
+		// 3. 按距离排序并选择最近目标
+			ValidEnemies.Sort([Origin](const AActor& A, const AActor& B) {
+				return FVector::DistSquared(A.GetActorLocation(), Origin) < 
+					   FVector::DistSquared(B.GetActorLocation(), Origin);
+			});
+		break;
+	case EGATargetSelection::Farthest:
+		// 3. 按距离排序并选择最远目标
+			ValidEnemies.Sort([Origin](const AActor& A, const AActor& B) {
+				return FVector::DistSquared(A.GetActorLocation(), Origin) > 
+					   FVector::DistSquared(B.GetActorLocation(), Origin);
+			});
+		break;
+	case EGATargetSelection::HighestHP:
+		break;
+	case EGATargetSelection::LowestHP:
+		break;
+	case EGATargetSelection::HighestHPPercent:
+		break;
+	case EGATargetSelection::LowestHPPercent:
+		break;
+	case EGATargetSelection::Strongest:
+		break;
+	case EGATargetSelection::Weakest:
+		break;
+	case EGATargetSelection::Random:
+		break;
+	case EGATargetSelection::Self:
+		break;
+	case EGATargetSelection::Other:
+		break;
+	case EGATargetSelection::Max:
+		break;
+	}
+	
+	
+	// 4. 构建目标数据
+	FGameplayAbilityTargetDataHandle Handle;
+	if (ValidEnemies.Num() > 0)
+	{
+		TArray<TWeakObjectPtr<AActor>> FinalTarget;
+		FinalTarget.Add(ValidEnemies[0]);
+		Handle = MakeTargetData(FinalTarget, Origin);
+	}
+
+	// 5. 回调通知
+	TargetDataReadyDelegate.Broadcast(Handle);
+}

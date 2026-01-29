@@ -23,9 +23,13 @@ class GGTD2_API UGGTD2_AttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
+	UGGTD2_AttributeSet();
 public:
 
 	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+	
+	// ========== 新增：声明PostGameplayEffectExecute函数 ==========
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 

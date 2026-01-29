@@ -6,7 +6,7 @@ public class GGTD2 : ModuleRules
 {
 	public GGTD2(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayAbilities","GameplayTags" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayAbilities","GameplayTags", "AnimGraphRuntime" });
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput" });

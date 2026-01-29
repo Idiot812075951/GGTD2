@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "GGTD2/DataAsset/GGTD2_FireDataAsset.h"
 #include "GGTD2/GamePlay/Character/GGTD2_CharacterBase.h"
+#include "GGTD2/GAS/GA/GGTD2_GameplayAbilityBase.h"
 #include "GA_FireBall.generated.h"
 
 class AProjectileActor;
@@ -13,7 +14,7 @@ class AProjectileActor;
  * 
  */
 UCLASS()
-class GGTD2_API UGA_FireBall : public UGameplayAbility
+class GGTD2_API UGA_FireBall : public UGGTD2_GameplayAbilityBase
 {
 	GENERATED_BODY()
 
@@ -32,6 +33,9 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	UAnimMontage* Montage_Cast;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	FGameplayTag AniNotifyTag;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TSubclassOf<AProjectileActor> ProjectileActorClass;
@@ -39,7 +43,7 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	UFUNCTION()
-	void OnMontageComplete();
+	void SpawnTargetActor();
 	
 	UFUNCTION()
 	void OnMontageCancelled();
@@ -47,5 +51,9 @@ public:
 	UFUNCTION()
 	void OnTargetSelected(const FGameplayAbilityTargetDataHandle& TargetData);
 	void SpawnFireballToTarget(AGGTD2_CharacterBase* Target);
-	
+
+	UFUNCTION()
+	void OnMontageNotifyBegin( FGameplayEventData Payload);
+	UFUNCTION()
+	void OnMontageOnInterrupted(FName NotifyName);
 };

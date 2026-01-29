@@ -5,25 +5,25 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbilityTargetActor_Radius.h"
 #include "GGTD2/GAS/GA/GGTD2_GameplayAbilityBase.h"
-#include "TargetActor_Radius_FireBall.generated.h"
+#include "TargetActor_Radius_DragonRage.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GGTD2_API ATargetActor_Radius_FireBall : public AGameplayAbilityTargetActor_Radius
+class GGTD2_API ATargetActor_Radius_DragonRage : public AGameplayAbilityTargetActor_Radius
 {
 	GENERATED_BODY()
 
-	ATargetActor_Radius_FireBall();
-
 public:
-	virtual void StartTargeting(UGameplayAbility* Ability) override;
-	virtual void ConfirmTargetingAndContinue() override;
 	void SetTargetSelectMode(EGATargetSelection InTargetSelection)
 	{
 		TargetSelection=InTargetSelection;
 	}
+	void SetRadius(float InRadius);
+	
+	virtual void StartTargeting(UGameplayAbility* Ability) override;
+	virtual void ConfirmTargetingAndContinue() override;
 private:
 	EGATargetSelection TargetSelection;
 };
