@@ -18,7 +18,7 @@ class GGTD2_API UGGTD2GASBlueprintLibrary : public UAbilitySystemBlueprintLibrar
 public:
 	UFUNCTION(BlueprintCallable, Category = "Instakill", 
 	meta = (DisplayName = "Instakill", Keywords = "秒杀"))
-	static void Instakill(AActor* Instigator, AActor* Target);
+	static void Instakill(AActor* Instigator, AActor* Target,UGameplayAbility* GA);
 	
 private:
 	static UGGTD2_CommonGASConfig* GASCommonConfig;

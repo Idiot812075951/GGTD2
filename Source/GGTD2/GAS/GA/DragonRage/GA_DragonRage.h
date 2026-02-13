@@ -12,7 +12,7 @@ class AGGTD2_CharacterBase;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class GGTD2_API UGA_DragonRage : public UGGTD2_GameplayAbilityBase
 {
 	GENERATED_BODY()

@@ -36,7 +36,7 @@ void UGA_DragonRage::OnMontageNotifyBegin(FGameplayEventData Payload)
 		TargetCapsule->SetSimulatePhysics(true);
 		TargetCapsule->AddImpulse(Impulse,FName(""),true);
 		UKismetSystemLibrary::PrintString(this,TEXT("UGA_DragonRage::OnMontageNotifyBegin"));
-		UGGTD2GASBlueprintLibrary::Instakill(OwnerCharacter,TargetCharacter);
+		UGGTD2GASBlueprintLibrary::Instakill(OwnerCharacter,TargetCharacter,this);
 	}
 	if (NotifyTask)
 	{

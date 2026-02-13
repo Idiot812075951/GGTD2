@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class GGTD2_API UGGTD2_FireDataAsset : public UGGTD2_ElementDataAsset
 {
 	GENERATED_BODY()

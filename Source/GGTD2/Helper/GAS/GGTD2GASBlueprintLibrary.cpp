@@ -7,7 +7,7 @@
 
 UGGTD2_CommonGASConfig* UGGTD2GASBlueprintLibrary::GASCommonConfig =nullptr;
 
-void UGGTD2GASBlueprintLibrary::Instakill(AActor* Instigator, AActor* Target)
+void UGGTD2GASBlueprintLibrary::Instakill(AActor* Instigator, AActor* Target,UGameplayAbility* GA)
 {
 	if (not Instigator->HasAuthority())
 	{
@@ -27,6 +27,7 @@ void UGGTD2GASBlueprintLibrary::Instakill(AActor* Instigator, AActor* Target)
 	}
 	
 	FGameplayEffectContextHandle EffectContext = TargetASC->MakeEffectContext();
+	EffectContext.SetAbility(GA);
 	EffectContext.AddInstigator(Instigator,Instigator);
 	EffectContext.AddSourceObject(Instigator);
 	if (auto DefaultInstakillGE=GetGASCommonConfig()->GetEffectByName(FName("GE.InstallKill")))

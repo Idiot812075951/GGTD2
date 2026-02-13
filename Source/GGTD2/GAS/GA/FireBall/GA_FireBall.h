@@ -13,7 +13,7 @@ class AProjectileActor;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class GGTD2_API UGA_FireBall : public UGGTD2_GameplayAbilityBase
 {
 	GENERATED_BODY()
@@ -50,6 +50,7 @@ public:
 
 	UFUNCTION()
 	void OnTargetSelected(const FGameplayAbilityTargetDataHandle& TargetData);
+	UFUNCTION()
 	void SpawnFireballToTarget(AGGTD2_CharacterBase* Target);
 
 	UFUNCTION()

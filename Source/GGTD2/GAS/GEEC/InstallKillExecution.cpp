@@ -16,6 +16,11 @@ void UInstallKillExecution::Execute_Implementation(const FGameplayEffectCustomEx
 	UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 	AActor* SourceActor = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetActor = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
+	if (!TargetASC or !SourceASC)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TargetASC or SourceASC Is Null"));
+		return;
+	}
 	
 	const UGGTD2_AttributeSet* TargetAttributeSet = Cast<UGGTD2_AttributeSet>(
 		   TargetASC->GetAttributeSet(UGGTD2_AttributeSet::StaticClass())
@@ -28,7 +33,7 @@ void UInstallKillExecution::Execute_Implementation(const FGameplayEffectCustomEx
 
 	// TODO 记录秒杀的伤害,这里需要1个接口,用来计算秒杀伤害
 	float TargetCurrentHealth = TargetAttributeSet->GetHealth();
-	RecordDamage += TargetCurrentHealth;
+	RecordDamage = TargetCurrentHealth;
 
 	// ============== 步骤4：符合GAS规范，将目标Health设为0（核心：通过OutExecutionOutput输出修改器） ==============
 	FGameplayModifierEvaluatedData HealthZeroModifier;
@@ -40,7 +45,7 @@ void UInstallKillExecution::Execute_Implementation(const FGameplayEffectCustomEx
 	OutExecutionOutput.AddOutputModifier(HealthZeroModifier);
 	AGGTD2_CharacterBase* PlayerPawn = Cast<AGGTD2_CharacterBase>(SourceActor);
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
-	const UGameplayAbility* Ability = Spec.GetContext().GetAbilityInstance_NotReplicated();
+	const UGameplayAbility* Ability = Spec.GetContext().GetAbility();
 	TSubclassOf<UGameplayAbility> AbilityClass = Ability ? Ability->GetClass() : nullptr;
 
 	UDamageStatisticsSystem::GetInstance()->RecordDamage(AbilityClass, PlayerPawn, RecordDamage);

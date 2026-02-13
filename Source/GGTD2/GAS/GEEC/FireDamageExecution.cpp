@@ -77,7 +77,7 @@ void UFireDamageExecution::Execute_Implementation(const FGameplayEffectCustomExe
     ));
     //下面这三个东西，从火球测试和正式火球，拿到的数据不一样，空了研究下
     const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
-    const UGameplayAbility* Ability = Spec.GetContext().GetAbilityInstance_NotReplicated();
+    const UGameplayAbility* Ability = Spec.GetContext().GetAbility();
     TSubclassOf<UGameplayAbility> AbilityClass = Ability ? Ability->GetClass() : nullptr;
     AGGTD2_CharacterBase* PlayerPawn = Cast<AGGTD2_CharacterBase>(SourceActor);
     // 记录伤害信息

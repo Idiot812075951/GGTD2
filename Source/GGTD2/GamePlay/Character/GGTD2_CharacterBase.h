@@ -7,16 +7,16 @@
 #include "AbilitySystemComponent.h"
 #include "GGTD2_CharacterBase.generated.h"
 
-// 1. 定义事件类型
-USTRUCT()
-struct FEnemyDeathEvent
-{
-	GENERATED_BODY()
-	UPROPERTY()
-	AActor* Killer;     // 击杀者
-	UPROPERTY()
-	AActor* DeadEnemy;  // 被击杀的怪物
-};
+// // 1. 定义事件类型
+// USTRUCT()
+// struct FEnemyDeathEvent
+// {
+// 	GENERATED_BODY()
+// 	UPROPERTY()
+// 	AActor* Killer;     // 击杀者
+// 	UPROPERTY()
+// 	AActor* DeadEnemy;  // 被击杀的怪物
+// };
 
 
 UCLASS()

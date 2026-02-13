@@ -27,7 +27,7 @@ enum class EGATargetSelection : uint8
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class GGTD2_API UGGTD2_GameplayAbilityBase : public UGameplayAbility
 {
 	GENERATED_BODY()

@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class GGTD2_API UGGTD2_ElementDataAsset : public UDataAsset
 {
 	GENERATED_BODY()

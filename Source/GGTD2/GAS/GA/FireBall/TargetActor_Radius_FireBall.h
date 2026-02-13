@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class GGTD2_API ATargetActor_Radius_FireBall : public AGameplayAbilityTargetActor_Radius
 {
 	GENERATED_BODY()
